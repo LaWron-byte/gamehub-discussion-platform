@@ -11,7 +11,7 @@ export const LanguageToggle = () => {
         className="p-2 rounded-lg hover:bg-secondary transition-colors flex items-center space-x-1"
         onClick={() => changeLanguage(currentLanguage === 'en' ? 'ru' : 'en')}
       >
-        <span className="text-sm font-medium uppercase">{currentLanguage}</span>
+        <span className="text-sm font-medium uppercase transition-colors">{currentLanguage}</span>
       </button>
     </div>
   );

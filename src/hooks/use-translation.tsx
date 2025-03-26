@@ -77,15 +77,24 @@ const translations = {
     removeFromFavorites: 'Remove from Favorites',
     report: 'Report',
     post_comment: 'Post Comment',
+    topic_not_found: 'Topic not found',
+    no_comments_yet: 'No comments yet',
     
     // Уведомления
     notifications: 'Notifications',
     noNotifications: 'No notifications',
+    your_notifications: 'Your Notifications',
+    no_notifications_yet: 'No notifications yet',
     markAllAsRead: 'Mark all as read',
     
     // Избранное
     favorites: 'Favorites',
     noFavorites: 'No favorites yet',
+    your_favorite_topics: 'Your Favorite Topics',
+    no_favorites_yet: 'No favorites yet',
+    
+    // Настройки
+    settings: 'Settings',
     
     // Ошибки и сообщения
     errorOccurred: 'An error occurred',
@@ -112,6 +121,17 @@ const translations = {
     reportReason: 'Reason',
     submit: 'Submit',
     reportSuccess: 'Thank you for your report. We will review it shortly.',
+    
+    // Чат
+    chat: 'Chat',
+    closeChat: 'Close Chat',
+    general: 'General',
+    saved: 'Saved',
+    sendMessage: 'Send a message...',
+    send: 'Send',
+    chatWith: 'Chat with the community',
+    noChatMessages: 'No messages yet. Start the conversation!',
+    noSavedMessages: 'No saved messages yet.',
   },
   ru: {
     // Общие фразы
@@ -184,15 +204,24 @@ const translations = {
     removeFromFavorites: 'Удалить из избранного',
     report: 'Пожаловаться',
     post_comment: 'Отправить комментарий',
+    topic_not_found: 'Тема не найдена',
+    no_comments_yet: 'Комментариев пока нет',
     
     // Уведомления
     notifications: 'Уведомления',
     noNotifications: 'Нет уведомлений',
+    your_notifications: 'Ваши уведомления',
+    no_notifications_yet: 'Уведомлений пока нет',
     markAllAsRead: 'Отметить все как прочитанные',
     
     // Избранное
     favorites: 'Избранное',
     noFavorites: 'В избранном пока ничего нет',
+    your_favorite_topics: 'Ваши избранные темы',
+    no_favorites_yet: 'В избранном пока ничего нет',
+    
+    // Настройки
+    settings: 'Настройки',
     
     // Ошибки и сообщения
     errorOccurred: 'Произошла ошибка',
@@ -219,6 +248,17 @@ const translations = {
     reportReason: 'Причина',
     submit: 'Отправить',
     reportSuccess: 'Спасибо за вашу жалобу. Мы рассмотрим ее в ближайшее время.',
+    
+    // Чат
+    chat: 'Чат',
+    closeChat: 'Закрыть чат',
+    general: 'Общий',
+    saved: 'Сохраненные',
+    sendMessage: 'Напишите сообщение...',
+    send: 'Отправить',
+    chatWith: 'Общайтесь с сообществом',
+    noChatMessages: 'Сообщений пока нет. Начните разговор!',
+    noSavedMessages: 'Сохраненных сообщений пока нет.',
   }
 };
 

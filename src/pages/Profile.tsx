@@ -1,16 +1,18 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@/hooks/use-translation';
 import { useAuth } from '@/hooks/use-auth';
 import { useForum } from '@/hooks/use-forum';
 import { Edit, MessageSquare, Book, Heart, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { FavoriteDialog } from '@/components/FavoriteDialog';
 
 const Profile = () => {
   const { t, currentLanguage } = useTranslation();
   const { user } = useAuth();
   const { getTopics, getFavorites } = useForum();
+  const [isFavoriteDialogOpen, setIsFavoriteDialogOpen] = useState(false);
 
   if (!user) {
     return (
@@ -97,27 +99,30 @@ const Profile = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="card bg-primary/5">
-              <Book className="h-6 w-6 text-primary mb-2" />
-              <div className="text-2xl font-bold">{user.topicsCount}</div>
-              <div className="text-sm text-muted-foreground">{t('topicsCreated')}</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-secondary/30 p-4 rounded-lg text-center">
+              <Book className="h-5 w-5 text-primary mx-auto mb-2" />
+              <div className="text-xl font-bold">{userTopics.length}</div>
+              <div className="text-xs text-muted-foreground">{t('topicsCreated')}</div>
             </div>
-            <div className="card bg-primary/5">
-              <MessageSquare className="h-6 w-6 text-primary mb-2" />
-              <div className="text-2xl font-bold">{user.commentsCount}</div>
-              <div className="text-sm text-muted-foreground">{t('commentsPosted')}</div>
+            <div className="bg-secondary/30 p-4 rounded-lg text-center">
+              <MessageSquare className="h-5 w-5 text-primary mx-auto mb-2" />
+              <div className="text-xl font-bold">{user.commentsCount}</div>
+              <div className="text-xs text-muted-foreground">{t('commentsPosted')}</div>
             </div>
-            <div className="card bg-primary/5">
-              <Heart className="h-6 w-6 text-primary mb-2" />
-              <div className="text-2xl font-bold">{user.likesReceived}</div>
-              <div className="text-sm text-muted-foreground">{t('likesReceived')}</div>
+            <div className="bg-secondary/30 p-4 rounded-lg text-center">
+              <Heart className="h-5 w-5 text-primary mx-auto mb-2" />
+              <div className="text-xl font-bold">{user.likesReceived}</div>
+              <div className="text-xs text-muted-foreground">{t('likesReceived')}</div>
             </div>
-            <div className="card bg-primary/5">
-              <Bookmark className="h-6 w-6 text-primary mb-2" />
-              <div className="text-2xl font-bold">{userFavorites.length}</div>
-              <div className="text-sm text-muted-foreground">{t('favorites')}</div>
-            </div>
+            <button 
+              onClick={() => setIsFavoriteDialogOpen(true)}
+              className="bg-secondary/30 p-4 rounded-lg text-center hover:bg-secondary/50 transition-colors"
+            >
+              <Bookmark className="h-5 w-5 text-primary mx-auto mb-2" />
+              <div className="text-xl font-bold">{userFavorites.length}</div>
+              <div className="text-xs text-muted-foreground">{t('favorites')}</div>
+            </button>
           </div>
         </motion.div>
 
@@ -163,6 +168,13 @@ const Profile = () => {
           )}
         </motion.div>
       </motion.div>
+      
+      {/* Favorites Dialog */}
+      <FavoriteDialog 
+        isOpen={isFavoriteDialogOpen}
+        onClose={() => setIsFavoriteDialogOpen(false)}
+        userId={user.id}
+      />
     </div>
   );
 };
