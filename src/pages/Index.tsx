@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Users, MessageSquare, Heart, Book, Globe, Gamepad2, Monitor } from 'lucide-react';
@@ -17,15 +16,10 @@ const Index = () => {
     comments: 0
   });
 
-  // Загружаем данные при монтировании
   useEffect(() => {
-    // Получаем последние темы
     setLatestTopics(getTopics('all', 'dateNewest').slice(0, 5));
-    
-    // Получаем популярные темы
     setPopularTopics(getTopics('all', 'mostLiked').slice(0, 5));
     
-    // Получаем статистику
     const users = JSON.parse(localStorage.getItem('users') || '[]').length;
     const topics = JSON.parse(localStorage.getItem('topics') || '[]').length;
     const comments = JSON.parse(localStorage.getItem('comments') || '[]').length;
@@ -37,7 +31,6 @@ const Index = () => {
     });
   }, [getTopics]);
 
-  // Анимации для элементов страницы
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -59,7 +52,6 @@ const Index = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 space-y-16">
-      {/* Hero Section */}
       <motion.section 
         className="text-center space-y-6"
         initial={{ opacity: 0, y: 20 }}
@@ -91,7 +83,6 @@ const Index = () => {
         </div>
       </motion.section>
       
-      {/* Feature Categories */}
       <motion.section 
         variants={containerVariants}
         initial="hidden"
@@ -153,9 +144,7 @@ const Index = () => {
         </motion.div>
       </motion.section>
       
-      {/* Latest and Popular Topics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Latest Topics */}
         <motion.section 
           className="space-y-6"
           initial={{ opacity: 0, x: -20 }}
@@ -203,7 +192,6 @@ const Index = () => {
           </div>
         </motion.section>
         
-        {/* Popular Topics */}
         <motion.section 
           className="space-y-6"
           initial={{ opacity: 0, x: 20 }}
@@ -252,12 +240,11 @@ const Index = () => {
         </motion.section>
       </div>
       
-      {/* Statistics */}
       <motion.section 
         className="py-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: a8, delay: 0.6 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
       >
         <h2 className="text-2xl font-bold text-center mb-12">{t('statistics')}</h2>
         

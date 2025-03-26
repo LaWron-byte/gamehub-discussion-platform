@@ -15,7 +15,7 @@ const ForumCategory = () => {
         <CardHeader>
           <CardTitle>{t('category_description')}</CardTitle>
           <CardDescription>
-            {t('forum_category_description', { category })}
+            {t('forum_category_description')}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const EditProfile = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const { user, updateProfile } = useAuth();
   const navigate = useNavigate();
 
