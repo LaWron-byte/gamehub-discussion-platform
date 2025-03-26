@@ -9,6 +9,8 @@ import { TranslationProvider } from "@/hooks/use-translation";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ForumProvider } from "@/hooks/use-forum";
 import { Header } from "@/components/Header";
+import { useEffect } from "react";
+import { initializeForumData } from "@/hooks/use-forum-init";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
@@ -23,6 +25,36 @@ import Notifications from "./pages/Notifications";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  useEffect(() => {
+    // Initialize forum data with sample content
+    initializeForumData();
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 pt-16 md:pt-20">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/forum/:category" element={<ForumCategory />} />
+            <Route path="/topic/:id" element={<TopicView />} />
+            <Route path="/create-topic" element={<CreateTopic />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
@@ -32,26 +64,7 @@ const App = () => (
             <TooltipProvider>
               <Toaster />
               <Sonner />
-              <BrowserRouter>
-                <div className="flex flex-col min-h-screen">
-                  <Header />
-                  <main className="flex-1 pt-16 md:pt-20">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/profile/edit" element={<EditProfile />} />
-                      <Route path="/forum/:category" element={<ForumCategory />} />
-                      <Route path="/topic/:id" element={<TopicView />} />
-                      <Route path="/create-topic" element={<CreateTopic />} />
-                      <Route path="/favorites" element={<Favorites />} />
-                      <Route path="/notifications" element={<Notifications />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
-                </div>
-              </BrowserRouter>
+              <AppContent />
             </TooltipProvider>
           </ForumProvider>
         </AuthProvider>

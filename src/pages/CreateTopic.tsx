@@ -1,59 +1,205 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from '@/hooks/use-translation';
+import { useAuth } from '@/hooks/use-auth';
+import { useForum } from '@/hooks/use-forum';
+import { motion } from 'framer-motion';
+import { Footer } from '@/components/Footer';
 
 const CreateTopic = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
+  const { user, isLoggedIn } = useAuth();
+  const { createTopic } = useForum();
+  const navigate = useNavigate();
+  
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('games');
+  const [content, setContent] = useState('');
+  const [tags, setTags] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  
+  if (!isLoggedIn) {
+    navigate('/login');
+    return null;
+  }
+  
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+    
+    if (!title.trim()) {
+      newErrors.title = currentLanguage === 'en' 
+        ? 'Title is required' 
+        : 'Заголовок обязателен';
+    } else if (title.length < 5) {
+      newErrors.title = currentLanguage === 'en' 
+        ? 'Title must be at least 5 characters long' 
+        : 'Заголовок должен содержать не менее 5 символов';
+    }
+    
+    if (!content.trim()) {
+      newErrors.content = currentLanguage === 'en' 
+        ? 'Content is required' 
+        : 'Содержание обязательно';
+    } else if (content.length < 10) {
+      newErrors.content = currentLanguage === 'en' 
+        ? 'Content must be at least 10 characters long' 
+        : 'Содержание должно содержать не менее 10 символов';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const tagArray = tags.split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
+      
+      const topic = await createTopic({
+        title,
+        content,
+        category,
+        tags: tagArray,
+      });
+      
+      if (topic) {
+        navigate(`/topic/${topic.id}`);
+      }
+    } catch (error) {
+      console.error('Failed to create topic:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   return (
-    <div className="container mx-auto px-4 py-6 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6">{t('create_new_topic')}</h1>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('topic_details')}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="title" className="text-sm font-medium">{t('title')}</label>
-            <Input id="title" placeholder={t('enter_topic_title')} />
-          </div>
+    <>
+      <div className="container mx-auto px-4 py-6 max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <h1 className="text-3xl font-bold mb-6">{t('create_new_topic')}</h1>
           
-          <div className="space-y-2">
-            <label htmlFor="category" className="text-sm font-medium">{t('category')}</label>
-            <select 
-              id="category" 
-              className="w-full px-3 py-2 border rounded-md"
-            >
-              <option value="games">{t('games')}</option>
-              <option value="industry">{t('industry')}</option>
-              <option value="offtopic">{t('offtopic')}</option>
-            </select>
-          </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="content" className="text-sm font-medium">{t('content')}</label>
-            <Textarea 
-              id="content" 
-              placeholder={t('enter_topic_content')}
-              rows={8} 
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="tags" className="text-sm font-medium">{t('tags')}</label>
-            <Input id="tags" placeholder={t('enter_tags_separated_by_commas')} />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit">{t('create_topic')}</Button>
-        </CardFooter>
-      </Card>
-    </div>
+          <Card>
+            <form onSubmit={handleSubmit}>
+              <CardHeader>
+                <CardTitle>{t('topic_details')}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="title" className="text-sm font-medium">{t('title')}</label>
+                  <Input 
+                    id="title" 
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите заголовок темы'} 
+                    className={errors.title ? 'border-destructive' : ''}
+                  />
+                  {errors.title && (
+                    <p className="text-sm text-destructive">{errors.title}</p>
+                  )}
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="category" className="text-sm font-medium">{t('category')}</label>
+                  <select 
+                    id="category" 
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-md"
+                  >
+                    <option value="games">{t('games')}</option>
+                    <option value="industry">{t('industry')}</option>
+                    <option value="offtopic">{t('offtopic')}</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="content" className="text-sm font-medium">{t('content')}</label>
+                  <Textarea 
+                    id="content" 
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder={currentLanguage === 'en' ? 'Enter topic content' : 'Введите содержание темы'}
+                    rows={8} 
+                    className={errors.content ? 'border-destructive' : ''}
+                  />
+                  {errors.content && (
+                    <p className="text-sm text-destructive">{errors.content}</p>
+                  )}
+                  <div className="text-sm text-muted-foreground mt-2">
+                    <p>
+                      {currentLanguage === 'en' 
+                        ? 'You can use basic formatting: **bold**, *italic*, ||spoiler||' 
+                        : 'Вы можете использовать базовое форматирование: **жирный**, *курсив*, ||спойлер||'}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="tags" className="text-sm font-medium">{t('tags')}</label>
+                  <Input 
+                    id="tags" 
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    placeholder={currentLanguage === 'en' ? 'Enter tags separated by commas' : 'Введите теги, разделенные запятыми'} 
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    {currentLanguage === 'en' 
+                      ? 'Example: RPG, Strategy, News' 
+                      : 'Пример: RPG, Стратегия, Новости'}
+                  </p>
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-end">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => navigate(-1)}
+                  className="mr-2"
+                >
+                  {t('cancel')}
+                </Button>
+                <Button 
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {currentLanguage === 'en' ? 'Creating...' : 'Создание...'}
+                    </span>
+                  ) : (
+                    t('create_topic')
+                  )}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </motion.div>
+      </div>
+      <Footer />
+    </>
   );
 };
 
