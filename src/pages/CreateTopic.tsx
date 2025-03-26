@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +17,7 @@ const CreateTopic = () => {
   const navigate = useNavigate();
   
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('games');
+  const [category, setCategory] = useState<'games' | 'industry' | 'offtopic'>('games');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,15 +69,10 @@ const CreateTopic = () => {
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
       
-      const topic = await createTopic({
-        title,
-        content,
-        category,
-        tags: tagArray,
-      });
+      const topicId = await createTopic(title, content, category, tagArray);
       
-      if (topic) {
-        navigate(`/topic/${topic.id}`);
+      if (topicId) {
+        navigate(`/topic/${topicId}`);
       }
     } catch (error) {
       console.error('Failed to create topic:', error);
@@ -109,7 +103,7 @@ const CreateTopic = () => {
                     id="title" 
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите заголовок темы'} 
+                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите загол��вок темы'} 
                     className={errors.title ? 'border-destructive' : ''}
                   />
                   {errors.title && (

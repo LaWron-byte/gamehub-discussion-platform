@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,13 +14,13 @@ const TopicView = () => {
   const { id } = useParams();
   const { t, currentLanguage } = useTranslation();
   const { user, isLoggedIn } = useAuth();
-  const { getTopic, getComments, addComment, likeTopic, addToFavorites, isInFavorites } = useForum();
+  const { getTopic, getComments, createComment, likeTopic, toggleFavorite, isFavorite } = useForum();
   
   const [topic, setTopic] = useState<any>(null);
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFav, setIsFav] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   
   useEffect(() => {
@@ -31,14 +30,14 @@ const TopicView = () => {
       
       if (fetchedTopic) {
         setComments(getComments(id));
-        setIsFavorite(isInFavorites(id));
+        setIsFav(isFavorite(id));
         
         if (isLoggedIn && user) {
           setIsLiked(fetchedTopic.likes.includes(user.id));
         }
       }
     }
-  }, [id, getTopic, getComments, isInFavorites, isLoggedIn, user]);
+  }, [id, getTopic, getComments, isFavorite, isLoggedIn, user]);
   
   if (!topic) {
     return (
@@ -61,10 +60,11 @@ const TopicView = () => {
     setIsSubmitting(true);
     
     try {
-      const comment = await addComment(topic.id, newComment);
+      const success = await createComment(topic.id, newComment);
       
-      if (comment) {
-        setComments([...comments, comment]);
+      if (success) {
+        const updatedComments = getComments(topic.id);
+        setComments(updatedComments);
         setNewComment('');
       }
     } finally {
@@ -72,38 +72,32 @@ const TopicView = () => {
     }
   };
   
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!isLoggedIn) return;
     
-    const updatedTopic = likeTopic(topic.id);
+    const success = await likeTopic(topic.id);
     
-    if (updatedTopic) {
-      setTopic(updatedTopic);
-      setIsLiked(updatedTopic.likes.includes(user?.id || ''));
+    if (success) {
+      const updatedTopic = getTopic(topic.id);
+      if (updatedTopic) {
+        setTopic(updatedTopic);
+        setIsLiked(updatedTopic.likes.includes(user?.id || ''));
+      }
     }
   };
   
   const handleFavorite = () => {
     if (!isLoggedIn) return;
     
-    const newFavoriteState = addToFavorites(topic.id);
-    setIsFavorite(newFavoriteState);
+    toggleFavorite(topic.id);
+    setIsFav(!isFav);
   };
   
-  // Helper function to format text with basic formatting
   const formatText = (text: string) => {
-    // Bold
     let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
-    // Italic
     formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    // Spoiler
     formattedText = formattedText.replace(/\|\|(.*?)\|\|/g, '<span class="spoiler">$1</span>');
-    
-    // New lines
     formattedText = formattedText.replace(/\n/g, '<br>');
-    
     return formattedText;
   };
   
@@ -137,10 +131,10 @@ const TopicView = () => {
                     <div className="flex items-center space-x-2">
                       <button 
                         onClick={handleFavorite}
-                        className={`p-2 rounded-full hover:bg-secondary transition-colors ${isFavorite ? 'text-primary' : ''}`}
-                        aria-label={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
+                        className={`p-2 rounded-full hover:bg-secondary transition-colors ${isFav ? 'text-primary' : ''}`}
+                        aria-label={isFav ? t('remove_from_favorites') : t('add_to_favorites')}
                       >
-                        <Bookmark size={20} className={isFavorite ? 'fill-primary' : ''} />
+                        <Bookmark size={20} className={isFav ? 'fill-primary' : ''} />
                       </button>
                       <button 
                         className="p-2 rounded-full hover:bg-secondary transition-colors"
@@ -375,7 +369,7 @@ const TopicView = () => {
                   <Link to="#" className="hover:text-primary transition-colors">
                     <h3 className="font-medium mb-1">{currentLanguage === 'en' 
                       ? 'Gaming communities: toxic or supportive?' 
-                      : 'Игровые сообщества: токсичные или поддерживающие?'}</h3>
+                      : 'Игровые сообщества: токсичные или поддерж��вающие?'}</h3>
                   </Link>
                   <div className="flex items-center text-xs text-muted-foreground">
                     <span>CommunityBuilder</span>

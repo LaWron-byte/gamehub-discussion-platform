@@ -25,6 +25,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "EliteGamer",
       userId: sampleUserIds[0],
       likes: [sampleUserIds[1], sampleUserIds[2], sampleUserIds[3]],
+      views: 128,
     },
     {
       title: "Most anticipated games of 2023?",
@@ -34,6 +35,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "GameEnthusiast",
       userId: sampleUserIds[1],
       likes: [sampleUserIds[0], sampleUserIds[2]],
+      views: 94,
     },
     
     // Games - Russian
@@ -45,6 +47,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "ДревнийГеймер",
       userId: sampleUserIds[2],
       likes: [sampleUserIds[0], sampleUserIds[3], sampleUserIds[4], sampleUserIds[5]],
+      views: 156,
     },
     {
       title: "Лучшие инди-игры 2022 года",
@@ -54,6 +57,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "ИндиЛюбитель",
       userId: sampleUserIds[3],
       likes: [sampleUserIds[1]],
+      views: 67,
     },
     
     // Industry - English
@@ -65,6 +69,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "IndustryAnalyst",
       userId: sampleUserIds[4],
       likes: [sampleUserIds[0], sampleUserIds[2], sampleUserIds[6]],
+      views: 203,
     },
     {
       title: "The growth of cloud gaming services",
@@ -74,6 +79,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "TechGamer",
       userId: sampleUserIds[5],
       likes: [sampleUserIds[4]],
+      views: 85,
     },
     
     // Industry - Russian
@@ -85,6 +91,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "ТехноАналитик",
       userId: sampleUserIds[6],
       likes: [sampleUserIds[7], sampleUserIds[8]],
+      views: 142,
     },
     {
       title: "Перспективы VR технологий в 2023 году",
@@ -94,6 +101,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "ВиртуальныйГеймер",
       userId: sampleUserIds[7],
       likes: [sampleUserIds[6], sampleUserIds[9]],
+      views: 98,
     },
     
     // Offtopic - English
@@ -105,6 +113,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "SetupKing",
       userId: sampleUserIds[8],
       likes: [sampleUserIds[1], sampleUserIds[3], sampleUserIds[5]],
+      views: 175,
     },
     {
       title: "Favorite gaming snacks?",
@@ -114,6 +123,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "SnackAttack",
       userId: sampleUserIds[9],
       likes: [sampleUserIds[0], sampleUserIds[2]],
+      views: 112,
     },
     
     // Offtopic - Russian
@@ -125,6 +135,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "КиноГеймер",
       userId: sampleUserIds[0],
       likes: [sampleUserIds[5], sampleUserIds[9]],
+      views: 87,
     },
     {
       title: "Как сохранять здоровье при длительных игровых сессиях?",
@@ -134,6 +145,7 @@ export const generateSampleTopics = (): Topic[] => {
       username: "ЗдоровыйГеймер",
       userId: sampleUserIds[3],
       likes: [sampleUserIds[1], sampleUserIds[6], sampleUserIds[8]],
+      views: 132,
     }
   ];
   
