@@ -30,6 +30,10 @@ const translations = {
     topics: 'Topics',
     comments: 'Comments',
     
+    // Навигация
+    home: 'Home',
+    discussions: 'Discussions',
+    
     // Авторизация
     username: 'Username',
     email: 'Email',
@@ -53,9 +57,13 @@ const translations = {
     cancel: 'Cancel',
     
     // Форум
-    createTopic: 'Create Topic',
+    create_topic: 'Create Topic',
+    create_new_topic: 'Create New Topic',
+    topic_details: 'Topic Details',
     topicTitle: 'Topic Title',
+    title: 'Title',
     topicContent: 'Topic Content',
+    content: 'Content',
     category: 'Category',
     tags: 'Tags (separated by commas)',
     publish: 'Publish',
@@ -67,6 +75,8 @@ const translations = {
     writeComment: 'Write a comment...',
     addToFavorites: 'Add to Favorites',
     removeFromFavorites: 'Remove from Favorites',
+    report: 'Report',
+    post_comment: 'Post Comment',
     
     // Уведомления
     notifications: 'Notifications',
@@ -92,6 +102,16 @@ const translations = {
     commentAdded: 'Comment added successfully',
     addedToFavorites: 'Added to favorites',
     removedFromFavorites: 'Removed from favorites',
+    
+    // Футер
+    follow_us: 'Follow us',
+    allRightsReserved: 'All rights reserved.',
+    
+    // Отчеты
+    reportTopic: 'Report Topic',
+    reportReason: 'Reason',
+    submit: 'Submit',
+    reportSuccess: 'Thank you for your report. We will review it shortly.',
   },
   ru: {
     // Общие фразы
@@ -117,6 +137,10 @@ const translations = {
     topics: 'Темы',
     comments: 'Комментарии',
     
+    // Навигация
+    home: 'Главная',
+    discussions: 'Обсуждения',
+    
     // Авторизация
     username: 'Имя пользователя',
     email: 'Email',
@@ -140,9 +164,13 @@ const translations = {
     cancel: 'Отмена',
     
     // Форум
-    createTopic: 'Создать тему',
+    create_topic: 'Создать тему',
+    create_new_topic: 'Создать новую тему',
+    topic_details: 'Детали темы',
     topicTitle: 'Заголовок темы',
+    title: 'Заголовок',
     topicContent: 'Содержание темы',
+    content: 'Содержание',
     category: 'Категория',
     tags: 'Теги (через запятую)',
     publish: 'Опубликовать',
@@ -154,6 +182,8 @@ const translations = {
     writeComment: 'Напишите комментарий...',
     addToFavorites: 'Добавить в избранное',
     removeFromFavorites: 'Удалить из избранного',
+    report: 'Пожаловаться',
+    post_comment: 'Отправить комментарий',
     
     // Уведомления
     notifications: 'Уведомления',
@@ -179,6 +209,16 @@ const translations = {
     commentAdded: 'Комментарий успешно добавлен',
     addedToFavorites: 'Добавлено в избранное',
     removedFromFavorites: 'Удалено из избранного',
+    
+    // Футер
+    follow_us: 'Присоединяйтесь к нам',
+    allRightsReserved: 'Все права защищены.',
+    
+    // Отчеты
+    reportTopic: 'Пожаловаться на тему',
+    reportReason: 'Причина',
+    submit: 'Отправить',
+    reportSuccess: 'Спасибо за вашу жалобу. Мы рассмотрим ее в ближайшее время.',
   }
 };
 

@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Users, MessageSquare, Heart, Book, Globe, Gamepad2, Monitor, ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/use-translation';
 import { useForum, Topic } from '@/hooks/use-forum';
+import { useAuth } from '@/hooks/use-auth';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { Footer } from '@/components/Footer';
 const Index = () => {
   const { t, currentLanguage } = useTranslation();
   const { getTopics } = useForum();
+  const { isLoggedIn } = useAuth();
   const [latestTopics, setLatestTopics] = useState<Topic[]>([]);
   const [popularTopics, setPopularTopics] = useState<Topic[]>([]);
   const [statistics, setStatistics] = useState({
@@ -73,12 +74,14 @@ const Index = () => {
             >
               {currentLanguage === 'en' ? 'Browse Forum' : 'Просмотреть форум'}
             </Link>
-            <Link 
-              to="/register" 
-              className="button-secondary px-6 py-3 rounded-xl"
-            >
-              {currentLanguage === 'en' ? 'Join Community' : 'Присоединиться'}
-            </Link>
+            {!isLoggedIn && (
+              <Link 
+                to="/register" 
+                className="button-secondary px-6 py-3 rounded-xl"
+              >
+                {currentLanguage === 'en' ? 'Join Community' : 'Присоединиться'}
+              </Link>
+            )}
           </div>
         </motion.section>
         

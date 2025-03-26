@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Moon, Sun, User, Search, Bell, Menu, X, Home, MessageSquare, Settings, LogOut } from 'lucide-react';
+import { Moon, Sun, User, Search, Menu, X, Home, MessageSquare, Settings, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@/hooks/use-theme';
 import { LanguageToggle } from './LanguageToggle';
@@ -76,10 +76,10 @@ export const Header = () => {
             
             <button 
               aria-label={theme === 'dark' ? t('lightMode') : t('darkMode')} 
-              className="p-1.5 rounded-full hover:bg-secondary transition-colors"
+              className="p-1 rounded-full hover:bg-secondary transition-colors"
               onClick={toggleTheme}
             >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
           </div>
           
@@ -92,15 +92,6 @@ export const Header = () => {
             <Link to="/forum/all" className="text-foreground/80 hover:text-foreground transition-colors flex items-center">
               <MessageSquare size={16} className="mr-1" />
               {t('discussions')}
-            </Link>
-            <Link to="/forum/games" className="text-foreground/80 hover:text-foreground transition-colors">
-              {t('games')}
-            </Link>
-            <Link to="/forum/industry" className="text-foreground/80 hover:text-foreground transition-colors">
-              {t('industry')}
-            </Link>
-            <Link to="/forum/offtopic" className="text-foreground/80 hover:text-foreground transition-colors">
-              {t('offtopic')}
             </Link>
           </nav>
           
@@ -134,23 +125,6 @@ export const Header = () => {
             
             {isLoggedIn ? (
               <>
-                <Link 
-                  to="/create-topic" 
-                  className="button-primary px-4 py-2 text-sm"
-                >
-                  {t('create_topic')}
-                </Link>
-                
-                <Link 
-                  to="/notifications" 
-                  className="relative p-2 rounded-full hover:bg-secondary transition-colors"
-                >
-                  <Bell size={20} />
-                  {hasNotifications && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
-                  )}
-                </Link>
-                
                 <div className="relative" ref={userMenuRef}>
                   <button 
                     onClick={toggleUserMenu}
@@ -186,10 +160,9 @@ export const Header = () => {
                       </Link>
                       <Link 
                         to="/notifications" 
-                        className="flex items-center px-4 py-2 hover:bg-secondary transition-colors"
+                        className="flex items-center px-4 py-2 hover:bg-secondary transition-colors relative"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <Bell size={16} className="mr-2" />
                         {t('notifications')}
                         {hasNotifications && (
                           <span className="ml-auto w-2 h-2 bg-destructive rounded-full" />
@@ -245,25 +218,25 @@ export const Header = () => {
           <div className="px-4 py-4 space-y-4 bg-background/95 backdrop-blur-lg border-t border-border shadow-elevated">
             <nav className="flex flex-col space-y-4">
               <Link 
-                to="/forum/games" 
+                to="/"
                 className="px-4 py-2 rounded-lg hover:bg-secondary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('games')}
+                {t('home')}
               </Link>
               <Link 
-                to="/forum/industry" 
+                to="/forum/all"
                 className="px-4 py-2 rounded-lg hover:bg-secondary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('industry')}
+                {t('discussions')}
               </Link>
               <Link 
-                to="/forum/offtopic" 
+                to="/create-topic"
                 className="px-4 py-2 rounded-lg hover:bg-secondary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('offtopic')}
+                {t('create_topic')}
               </Link>
             </nav>
             
@@ -285,19 +258,6 @@ export const Header = () => {
                 </button>
                 
                 <LanguageToggle />
-                
-                {isLoggedIn && (
-                  <Link 
-                    to="/notifications" 
-                    className="relative p-2 rounded-full hover:bg-secondary transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Bell size={20} />
-                    {hasNotifications && (
-                      <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
-                    )}
-                  </Link>
-                )}
               </div>
               
               {isLoggedIn ? (
@@ -349,3 +309,4 @@ export const Header = () => {
     </header>
   );
 };
+

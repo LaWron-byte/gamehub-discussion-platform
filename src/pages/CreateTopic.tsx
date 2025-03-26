@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,11 @@ import { useAuth } from '@/hooks/use-auth';
 import { useForum } from '@/hooks/use-forum';
 import { motion } from 'framer-motion';
 import { Footer } from '@/components/Footer';
+import { 
+  Bold, Italic, Underline, 
+  AlignLeft, AlignCenter, AlignRight, 
+  Heading1, Heading2, Heading3
+} from 'lucide-react';
 
 const CreateTopic = () => {
   const { t, currentLanguage } = useTranslation();
@@ -80,6 +86,52 @@ const CreateTopic = () => {
       setIsSubmitting(false);
     }
   };
+
+  const insertFormatting = (type: string) => {
+    // Get the textarea element
+    const textarea = document.getElementById('content') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = content.substring(start, end);
+    let formattedText = '';
+    let cursorOffset = 0;
+
+    switch (type) {
+      case 'bold':
+        formattedText = `**${selectedText}**`;
+        cursorOffset = 2;
+        break;
+      case 'italic':
+        formattedText = `*${selectedText}*`;
+        cursorOffset = 1;
+        break;
+      case 'underline':
+        formattedText = `__${selectedText}__`;
+        cursorOffset = 2;
+        break;
+      case 'spoiler':
+        formattedText = `||${selectedText}||`;
+        cursorOffset = 2;
+        break;
+      default:
+        return;
+    }
+
+    const newContent = content.substring(0, start) + formattedText + content.substring(end);
+    setContent(newContent);
+
+    // Set focus back to textarea and update cursor position
+    setTimeout(() => {
+      textarea.focus();
+      if (selectedText) {
+        textarea.setSelectionRange(start, end + cursorOffset * 2);
+      } else {
+        textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
+      }
+    }, 0);
+  };
   
   return (
     <>
@@ -103,7 +155,7 @@ const CreateTopic = () => {
                     id="title" 
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите загол��вок темы'} 
+                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите заголовок темы'} 
                     className={errors.title ? 'border-destructive' : ''}
                   />
                   {errors.title && (
@@ -116,7 +168,7 @@ const CreateTopic = () => {
                   <select 
                     id="category" 
                     value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={(e) => setCategory(e.target.value as 'games' | 'industry' | 'offtopic')}
                     className="w-full px-3 py-2 border rounded-md"
                   >
                     <option value="games">{t('games')}</option>
@@ -127,6 +179,44 @@ const CreateTopic = () => {
                 
                 <div className="space-y-2">
                   <label htmlFor="content" className="text-sm font-medium">{t('content')}</label>
+                  <div className="flex flex-wrap gap-1 mb-2 border border-input rounded-md px-2 py-1 bg-background">
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-8 h-8 p-0"
+                      onClick={() => insertFormatting('bold')}
+                    >
+                      <Bold size={16} />
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-8 h-8 p-0"
+                      onClick={() => insertFormatting('italic')}
+                    >
+                      <Italic size={16} />
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-8 h-8 p-0"
+                      onClick={() => insertFormatting('underline')}
+                    >
+                      <Underline size={16} />
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-8 h-8 p-0"
+                      onClick={() => insertFormatting('spoiler')}
+                    >
+                      <span className="text-xs font-bold">||S||</span>
+                    </Button>
+                  </div>
                   <Textarea 
                     id="content" 
                     value={content}

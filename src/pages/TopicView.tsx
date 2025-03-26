@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,15 +7,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from '@/hooks/use-translation';
 import { useAuth } from '@/hooks/use-auth';
 import { useForum } from '@/hooks/use-forum';
-import { Heart, MessageSquare, User, ChevronLeft, Bookmark, Share, Flag, Clock } from 'lucide-react';
+import { Heart, MessageSquare, User, ChevronLeft, Bookmark, Flag, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Footer } from '@/components/Footer';
+import { useToast } from "@/hooks/use-toast";
 
 const TopicView = () => {
   const { id } = useParams();
   const { t, currentLanguage } = useTranslation();
   const { user, isLoggedIn } = useAuth();
   const { getTopic, getComments, createComment, likeTopic, toggleFavorite, isFavorite } = useForum();
+  const { toast } = useToast();
   
   const [topic, setTopic] = useState<any>(null);
   const [comments, setComments] = useState<any[]>([]);
@@ -22,6 +25,9 @@ const TopicView = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFav, setIsFav] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [isReporting, setIsReporting] = useState(false);
   
   useEffect(() => {
     if (id) {
@@ -75,28 +81,55 @@ const TopicView = () => {
   const handleLike = async () => {
     if (!isLoggedIn) return;
     
-    const success = await likeTopic(topic.id);
-    
-    if (success) {
+    try {
+      await likeTopic(topic.id);
+      
+      // Update topic to get fresh likes array
       const updatedTopic = getTopic(topic.id);
       if (updatedTopic) {
         setTopic(updatedTopic);
+        // Toggle the liked state based on whether user ID is in likes array
         setIsLiked(updatedTopic.likes.includes(user?.id || ''));
       }
+    } catch (error) {
+      console.error('Error liking topic:', error);
     }
   };
   
-  const handleFavorite = () => {
+  const handleFavorite = async () => {
     if (!isLoggedIn) return;
     
-    toggleFavorite(topic.id);
-    setIsFav(!isFav);
+    try {
+      toggleFavorite(topic.id);
+      setIsFav(!isFav);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
+  const handleReportSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!isLoggedIn || !reportReason.trim()) return;
+    
+    setIsReporting(true);
+    
+    // Simulate report submission
+    setTimeout(() => {
+      toast({
+        title: t('reportSuccess'),
+        description: "",
+      });
+      setShowReportForm(false);
+      setReportReason('');
+      setIsReporting(false);
+    }, 1000);
   };
   
   const formatText = (text: string) => {
     let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    formattedText = formattedText.replace(/\|\|(.*?)\|\|/g, '<span class="spoiler">$1</span>');
+    formattedText = formattedText.replace(/\|\|(.*?)\|\|/g, '<span class="spoiler" style="background-color: #333; color: #333; cursor: pointer;" onclick="this.style.backgroundColor=\'transparent\'; this.style.color=\'inherit\';">$1</span>');
     formattedText = formattedText.replace(/\n/g, '<br>');
     return formattedText;
   };
@@ -132,19 +165,14 @@ const TopicView = () => {
                       <button 
                         onClick={handleFavorite}
                         className={`p-2 rounded-full hover:bg-secondary transition-colors ${isFav ? 'text-primary' : ''}`}
-                        aria-label={isFav ? t('remove_from_favorites') : t('add_to_favorites')}
+                        aria-label={isFav ? t('removeFromFavorites') : t('addToFavorites')}
                       >
                         <Bookmark size={20} className={isFav ? 'fill-primary' : ''} />
                       </button>
                       <button 
                         className="p-2 rounded-full hover:bg-secondary transition-colors"
-                        aria-label={t('share')}
-                      >
-                        <Share size={20} />
-                      </button>
-                      <button 
-                        className="p-2 rounded-full hover:bg-secondary transition-colors"
                         aria-label={t('report')}
+                        onClick={() => setShowReportForm(true)}
                       >
                         <Flag size={20} />
                       </button>
@@ -186,6 +214,50 @@ const TopicView = () => {
                     className="prose dark:prose-invert max-w-none"
                     dangerouslySetInnerHTML={{ __html: formatText(topic.content) }}
                   />
+
+                  {/* Report Form */}
+                  {showReportForm && (
+                    <div className="mt-6 border border-border rounded-lg p-4 bg-background/50">
+                      <h3 className="text-lg font-medium mb-3">{t('reportTopic')}</h3>
+                      <form onSubmit={handleReportSubmit}>
+                        <div className="space-y-2 mb-4">
+                          <label htmlFor="reportReason" className="text-sm font-medium">{t('reportReason')}</label>
+                          <Textarea 
+                            id="reportReason" 
+                            value={reportReason}
+                            onChange={(e) => setReportReason(e.target.value)}
+                            rows={4}
+                            placeholder={currentLanguage === 'en' ? 'Please describe why you are reporting this topic...' : 'Пожалуйста, опишите, почему вы жалуетесь на эту тему...'}
+                          />
+                        </div>
+                        <div className="flex justify-end space-x-2">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => setShowReportForm(false)}
+                          >
+                            {t('cancel')}
+                          </Button>
+                          <Button 
+                            type="submit"
+                            disabled={isReporting || !reportReason.trim()}
+                          >
+                            {isReporting ? (
+                              <span className="flex items-center">
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {currentLanguage === 'en' ? 'Submitting...' : 'Отправка...'}
+                              </span>
+                            ) : (
+                              t('submit')
+                            )}
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <div className="flex items-center space-x-4">
@@ -246,7 +318,7 @@ const TopicView = () => {
               {isLoggedIn ? (
                 <Card className="mb-6">
                   <CardHeader>
-                    <CardTitle className="text-lg">{t('add_comment')}</CardTitle>
+                    <CardTitle className="text-lg">{t('addComment')}</CardTitle>
                   </CardHeader>
                   <form onSubmit={handleSubmitComment}>
                     <CardContent>
@@ -369,7 +441,7 @@ const TopicView = () => {
                   <Link to="#" className="hover:text-primary transition-colors">
                     <h3 className="font-medium mb-1">{currentLanguage === 'en' 
                       ? 'Gaming communities: toxic or supportive?' 
-                      : 'Игровые сообщества: токсичные или поддерж��вающие?'}</h3>
+                      : 'Игровые сообщества: токсичные или поддерживающие?'}</h3>
                   </Link>
                   <div className="flex items-center text-xs text-muted-foreground">
                     <span>CommunityBuilder</span>

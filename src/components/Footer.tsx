@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useTranslation } from '@/hooks/use-translation';
-import { Twitter, MessageCircle, Heart } from 'lucide-react';
+import { MessageCircle, Heart, Twitter, Vk, Telegram } from 'lucide-react';
 
 export const Footer = () => {
   const { t, currentLanguage } = useTranslation();
@@ -15,6 +15,7 @@ export const Footer = () => {
             <div className="flex items-center space-x-2 mb-2">
               <span className="text-xl font-heading font-bold">GameHub</span>
               <span className="text-sm text-muted-foreground">&copy; {currentYear}</span>
+              <span className="text-sm text-muted-foreground">{t('allRightsReserved')}</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-md">
               {currentLanguage === 'en' 
@@ -38,6 +39,15 @@ export const Footer = () => {
                 <MessageCircle size={20} />
               </a>
               <a 
+                href="https://telegram.org" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 rounded-full hover:bg-secondary transition-colors"
+                aria-label="Telegram"
+              >
+                <Telegram size={20} />
+              </a>
+              <a 
                 href="https://twitter.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -47,24 +57,16 @@ export const Footer = () => {
                 <Twitter size={20} />
               </a>
               <a 
-                href="https://t.me" 
+                href="https://vk.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-2 rounded-full hover:bg-secondary transition-colors"
-                aria-label="Telegram"
+                aria-label="VKontakte"
               >
-                <Heart size={20} />
+                <Vk size={20} />
               </a>
             </div>
           </div>
-        </div>
-        
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            {currentLanguage === 'en' 
-              ? 'All rights reserved.'
-              : 'Все права защищены.'}
-          </p>
         </div>
       </div>
     </footer>
