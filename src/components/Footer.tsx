@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useTranslation } from '@/hooks/use-translation';
-import { MessageCircle, Heart, Twitter, Vk, Telegram } from 'lucide-react';
+import { MessageCircle, Heart, Twitter, Mail, Globe } from 'lucide-react';
 
 export const Footer = () => {
   const { t, currentLanguage } = useTranslation();
@@ -45,7 +45,7 @@ export const Footer = () => {
                 className="p-2 rounded-full hover:bg-secondary transition-colors"
                 aria-label="Telegram"
               >
-                <Telegram size={20} />
+                <Mail size={20} />
               </a>
               <a 
                 href="https://twitter.com" 
@@ -63,7 +63,7 @@ export const Footer = () => {
                 className="p-2 rounded-full hover:bg-secondary transition-colors"
                 aria-label="VKontakte"
               >
-                <Vk size={20} />
+                <Globe size={20} />
               </a>
             </div>
           </div>

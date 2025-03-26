@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,13 @@ import {
   AlignLeft, AlignCenter, AlignRight, 
   Heading1, Heading2, Heading3
 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CreateTopic = () => {
   const { t, currentLanguage } = useTranslation();
@@ -133,6 +139,10 @@ const CreateTopic = () => {
     }, 0);
   };
   
+  const handleCategoryChange = (value: string) => {
+    setCategory(value as 'games' | 'industry' | 'offtopic');
+  };
+  
   return (
     <>
       <div className="container mx-auto px-4 py-6 max-w-3xl">
@@ -165,16 +175,19 @@ const CreateTopic = () => {
                 
                 <div className="space-y-2">
                   <label htmlFor="category" className="text-sm font-medium">{t('category')}</label>
-                  <select 
-                    id="category" 
+                  <Select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value as 'games' | 'industry' | 'offtopic')}
-                    className="w-full px-3 py-2 border rounded-md"
+                    onValueChange={handleCategoryChange}
                   >
-                    <option value="games">{t('games')}</option>
-                    <option value="industry">{t('industry')}</option>
-                    <option value="offtopic">{t('offtopic')}</option>
-                  </select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t('select_category')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="games">{t('games')}</SelectItem>
+                      <SelectItem value="industry">{t('industry')}</SelectItem>
+                      <SelectItem value="offtopic">{t('offtopic')}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div className="space-y-2">
