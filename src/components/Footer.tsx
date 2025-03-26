@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useTranslation } from '@/hooks/use-translation';
-import { MessageCircle, Heart, Twitter, Mail, Globe } from 'lucide-react';
+import { MessageCircle, Mail, Twitter, ExternalLink } from 'lucide-react';
 
 export const Footer = () => {
   const { t, currentLanguage } = useTranslation();
@@ -63,7 +63,7 @@ export const Footer = () => {
                 className="p-2 rounded-full hover:bg-secondary transition-colors"
                 aria-label="VKontakte"
               >
-                <Globe size={20} />
+                <ExternalLink size={20} />
               </a>
             </div>
           </div>

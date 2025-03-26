@@ -8,7 +8,6 @@ import { useTranslation } from '@/hooks/use-translation';
 import { useAuth } from '@/hooks/use-auth';
 import { useForum } from '@/hooks/use-forum';
 import { motion } from 'framer-motion';
-import { Footer } from '@/components/Footer';
 import { 
   Bold, Italic, Underline, 
   AlignLeft, AlignCenter, AlignRight, 
@@ -144,159 +143,156 @@ const CreateTopic = () => {
   };
   
   return (
-    <>
-      <div className="container mx-auto px-4 py-6 max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <h1 className="text-3xl font-bold mb-6">{t('create_new_topic')}</h1>
-          
-          <Card>
-            <form onSubmit={handleSubmit}>
-              <CardHeader>
-                <CardTitle>{t('topic_details')}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="title" className="text-sm font-medium">{t('title')}</label>
-                  <Input 
-                    id="title" 
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите заголовок темы'} 
-                    className={errors.title ? 'border-destructive' : ''}
-                  />
-                  {errors.title && (
-                    <p className="text-sm text-destructive">{errors.title}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="category" className="text-sm font-medium">{t('category')}</label>
-                  <Select
-                    value={category}
-                    onValueChange={handleCategoryChange}
+    <div className="container mx-auto px-4 py-6 max-w-3xl">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h1 className="text-3xl font-bold mb-6">{t('create_new_topic')}</h1>
+        
+        <Card>
+          <form onSubmit={handleSubmit}>
+            <CardHeader>
+              <CardTitle>{t('topic_details')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="title" className="text-sm font-medium">{t('title')}</label>
+                <Input 
+                  id="title" 
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder={currentLanguage === 'en' ? 'Enter topic title' : 'Введите заголовок темы'} 
+                  className={errors.title ? 'border-destructive' : ''}
+                />
+                {errors.title && (
+                  <p className="text-sm text-destructive">{errors.title}</p>
+                )}
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="category" className="text-sm font-medium">{t('category')}</label>
+                <Select
+                  value={category}
+                  onValueChange={handleCategoryChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t('select_category')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="games">{t('games')}</SelectItem>
+                    <SelectItem value="industry">{t('industry')}</SelectItem>
+                    <SelectItem value="offtopic">{t('offtopic')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="content" className="text-sm font-medium">{t('content')}</label>
+                <div className="flex flex-wrap gap-1 mb-2 border border-input rounded-md px-2 py-1 bg-background">
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-8 h-8 p-0"
+                    onClick={() => insertFormatting('bold')}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t('select_category')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="games">{t('games')}</SelectItem>
-                      <SelectItem value="industry">{t('industry')}</SelectItem>
-                      <SelectItem value="offtopic">{t('offtopic')}</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <Bold size={16} />
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-8 h-8 p-0"
+                    onClick={() => insertFormatting('italic')}
+                  >
+                    <Italic size={16} />
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-8 h-8 p-0"
+                    onClick={() => insertFormatting('underline')}
+                  >
+                    <Underline size={16} />
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-8 h-8 p-0"
+                    onClick={() => insertFormatting('spoiler')}
+                  >
+                    <span className="text-xs font-bold">||S||</span>
+                  </Button>
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="content" className="text-sm font-medium">{t('content')}</label>
-                  <div className="flex flex-wrap gap-1 mb-2 border border-input rounded-md px-2 py-1 bg-background">
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-8 h-8 p-0"
-                      onClick={() => insertFormatting('bold')}
-                    >
-                      <Bold size={16} />
-                    </Button>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-8 h-8 p-0"
-                      onClick={() => insertFormatting('italic')}
-                    >
-                      <Italic size={16} />
-                    </Button>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-8 h-8 p-0"
-                      onClick={() => insertFormatting('underline')}
-                    >
-                      <Underline size={16} />
-                    </Button>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-8 h-8 p-0"
-                      onClick={() => insertFormatting('spoiler')}
-                    >
-                      <span className="text-xs font-bold">||S||</span>
-                    </Button>
-                  </div>
-                  <Textarea 
-                    id="content" 
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder={currentLanguage === 'en' ? 'Enter topic content' : 'Введите содержание темы'}
-                    rows={8} 
-                    className={errors.content ? 'border-destructive' : ''}
-                  />
-                  {errors.content && (
-                    <p className="text-sm text-destructive">{errors.content}</p>
-                  )}
-                  <div className="text-sm text-muted-foreground mt-2">
-                    <p>
-                      {currentLanguage === 'en' 
-                        ? 'You can use basic formatting: **bold**, *italic*, ||spoiler||' 
-                        : 'Вы можете использовать базовое форматирование: **жирный**, *курсив*, ||спойлер||'}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="tags" className="text-sm font-medium">{t('tags')}</label>
-                  <Input 
-                    id="tags" 
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    placeholder={currentLanguage === 'en' ? 'Enter tags separated by commas' : 'Введите теги, разделенные запятыми'} 
-                  />
-                  <p className="text-sm text-muted-foreground">
+                <Textarea 
+                  id="content" 
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder={currentLanguage === 'en' ? 'Enter topic content' : 'Введите содержание темы'}
+                  rows={8} 
+                  className={errors.content ? 'border-destructive' : ''}
+                />
+                {errors.content && (
+                  <p className="text-sm text-destructive">{errors.content}</p>
+                )}
+                <div className="text-sm text-muted-foreground mt-2">
+                  <p>
                     {currentLanguage === 'en' 
-                      ? 'Example: RPG, Strategy, News' 
-                      : 'Пример: RPG, Стратегия, Новости'}
+                      ? 'You can use basic formatting: **bold**, *italic*, ||spoiler||' 
+                      : 'Вы можете использовать базовое форматирование: **жирный**, *курсив*, ||спойлер||'}
                   </p>
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => navigate(-1)}
-                  className="mr-2"
-                >
-                  {t('cancel')}
-                </Button>
-                <Button 
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      {currentLanguage === 'en' ? 'Creating...' : 'Создание...'}
-                    </span>
-                  ) : (
-                    t('create_topic')
-                  )}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
-        </motion.div>
-      </div>
-      <Footer />
-    </>
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="tags" className="text-sm font-medium">{t('tags')}</label>
+                <Input 
+                  id="tags" 
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder={currentLanguage === 'en' ? 'Enter tags separated by commas' : 'Введите теги, разделенные запятыми'} 
+                />
+                <p className="text-sm text-muted-foreground">
+                  {currentLanguage === 'en' 
+                    ? 'Example: RPG, Strategy, News' 
+                    : 'Пример: RPG, Стратегия, Новости'}
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => navigate(-1)}
+                className="mr-2"
+              >
+                {t('cancel')}
+              </Button>
+              <Button 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {currentLanguage === 'en' ? 'Creating...' : 'Создание...'}
+                  </span>
+                ) : (
+                  t('create_topic')
+                )}
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
 

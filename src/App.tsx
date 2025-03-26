@@ -9,6 +9,7 @@ import { TranslationProvider } from "@/hooks/use-translation";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ForumProvider } from "@/hooks/use-forum";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { useEffect } from "react";
 import { initializeForumData } from "@/hooks/use-forum-init";
 import Index from "./pages/Index";
@@ -50,6 +51,7 @@ const AppContent = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );
